@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+    <div class="content">
+        <div class="content-topic">New schema</div>
+        <form id="schema-form" action="" method="post">
+            {% csrf_token %}
+            <button class="blue-button" type="submit" style="float: right;">Submit</button>
+            {{ form|crispy }}
+            <div class="content-topic">Schema columns</div>
+            {{ schema_details_form.management_form }}
+            {% for field in schema_details_form %}
+                <div class="column-form">
+                    {{ field.label_tag }}{{ field }}
+                </div>
+            {% endfor %}
+            <button class="blue-button" id="add-column" type="button">Add column</button>
+        </form>
+    </div>
+{% endblock %}

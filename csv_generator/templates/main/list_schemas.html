@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="content-header">
+        <div class="content-topic">Data schemas</div>
+        <a class="green-link-button" href="{% url 'main:create_schema' %}">New schema</a>
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Modified</th>
+            <th>Actions</th>
+        </tr>
+        {% for item in object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'main:edit_schema' item.pk %}">{{ item.name }}</a></td>
+                <td>{{ item.updated_at|date:"Y-m-d" }}</td>
+                <td>
+                    <a href="{% url 'main:edit_schema' item.pk %}">Edit scheme</a>
+                    <a href="{% url 'main:delete_schema' item.pk %}" class="red-link">Delete</a>
+                    <a href="{% url 'main:list_datasets' item.pk %}">List datasets</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

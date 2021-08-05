@@ -1,0 +1,29 @@
+{% extends 'registration/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
+                        {{ form.management_form }}
+                        <div class="input-form form-group">
+                            {{ form.username }}
+                        </div>
+                        <div class="input-form form-group">
+                            {{ form.password }}
+                        </div>
+                        <div class="login-button form-group">
+                            <input type="submit" value="Login" class="btn float-right login_btn">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
