@@ -53,6 +53,7 @@ class SchemaDetails(models.Model):
 
 class Dataset(models.Model):
     file = models.FileField(upload_to='', blank=True)
+    task_id = models.CharField(max_length=50)
     schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

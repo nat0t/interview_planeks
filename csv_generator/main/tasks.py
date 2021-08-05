@@ -11,6 +11,9 @@ from main.models import Schema, SchemaDetails, Dataset
 
 @shared_task(bind=True)
 def generate_data(self, schema_id, rows):
+    filename = f'file_{schema_id}_{time.time()}.csv'
+    Dataset.objects.create(schema=Schema.objects.get(id=schema_id), file=filename, task_id=self.request.id)
+
     schema_id = int(schema_id)
     rows = int(rows)
     schema_columns = SchemaDetails.objects.filter(schema=schema_id)
@@ -33,7 +36,6 @@ def generate_data(self, schema_id, rows):
     }
     quotes = quotes_dict[Schema.objects.get(id=schema_id).quotes]
 
-    filename = f'file_{schema_id}_{time.time()}.csv'
     filepath = os.path.join(MEDIA_ROOT, filename)
     fake = Faker()
     gen_template = {
@@ -51,5 +53,3 @@ def generate_data(self, schema_id, rows):
             self.update_state(state='PROCESSING')
             types_fake = [gen_template[item]() for item in types]
             writer.writerow(types_fake)
-
-    Dataset.objects.create(schema=Schema.objects.get(id=schema_id), file=filename)

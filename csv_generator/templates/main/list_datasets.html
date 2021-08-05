@@ -23,7 +23,11 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ item.created_at|date:"Y-m-d" }}</a></td>
-                <td>{{ status }}</td>
+                {% if item.status == 'SUCCESS' %}
+                    <td><img src="{% static 'main/img/label-ready.png' %}" alt="ready"></td>
+                {% elif item.status == 'PROCESSING' %}
+                    <td><img src="{% static 'main/img/label-processing.png' %}" alt="processing"></td>
+                {% endif %}
                 <td>
                     <a href="{{ item.file.url }}" download>Download</a>
                 </td>

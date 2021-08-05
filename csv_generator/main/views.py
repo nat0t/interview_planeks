@@ -1,7 +1,7 @@
-from celery import current_app
+from celery.result import AsyncResult
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from main.forms import SchemaForm, SchemaDetailsFormSet, DatasetForm
@@ -83,9 +83,9 @@ class DatasetList(ListView):
         return Dataset.objects.filter(schema=self.schema)
 
     def get_context_data(self, **kwargs):
-        tasks = current_app.tasks['main.tasks.generate_data']
-        print(tasks)
         context = super(DatasetList, self).get_context_data(**kwargs)
+        for item in context['object_list']:
+            item.status = AsyncResult(item.task_id).state
         context['schema_id'] = self.kwargs['pk']
         return context
 
@@ -95,9 +95,9 @@ def create_dataset(request):
     if request.method == 'POST':
         form = DatasetForm(request.POST)
         if form.is_valid():
-            task = generate_data.delay(request.POST['schema_id'], request.POST['rows'])
-            # status = 'Ready' if task.ready() else 'Processing'
-            return redirect(f'/schemas/list_datasets/{request.POST["schema_id"]}/',)
+            generate_data.delay(request.POST['schema_id'], request.POST['rows'])
+            # return redirect(f'/schemas/list_datasets/{request.POST["schema_id"]}/',)
+            return redirect('main:list_schemas')
     else:
         form = DatasetForm()
     return render(request, 'main/list_datasets.html', {'form': form})
