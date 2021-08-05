@@ -1,4 +1,6 @@
 from celery.result import AsyncResult
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -9,7 +11,7 @@ from main.models import Schema, Dataset
 from main.tasks import generate_data
 
 
-class SchemaList(ListView):
+class SchemaList(LoginRequiredMixin, ListView):
     model = Schema
     template_name = 'main/list_schemas.html'
     fields = ['pk', 'name', 'updated_at']
@@ -41,7 +43,7 @@ class SchemaCreate(CreateView):
         return super(SchemaCreate, self).form_valid(form)
 
 
-class SchemaEdit(UpdateView):
+class SchemaEdit(LoginRequiredMixin, UpdateView):
     model = Schema
     template_name = 'main/schema_form.html'
     form_class = SchemaForm
@@ -67,13 +69,13 @@ class SchemaEdit(UpdateView):
         return super(SchemaEdit, self).form_valid(form)
 
 
-class SchemaDelete(DeleteView):
+class SchemaDelete(LoginRequiredMixin, DeleteView):
     model = Schema
     template_name = 'main/delete_confirm_schema.html'
     success_url = reverse_lazy('main:list_schemas')
 
 
-class DatasetList(ListView):
+class DatasetList(LoginRequiredMixin, ListView):
     model = Dataset
     template_name = 'main/list_datasets.html'
     fields = ['created_at', ]
@@ -90,6 +92,7 @@ class DatasetList(ListView):
         return context
 
 
+@login_required
 def create_dataset(request):
     print(request.POST)
     if request.method == 'POST':

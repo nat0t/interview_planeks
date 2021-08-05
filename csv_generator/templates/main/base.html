@@ -18,7 +18,7 @@
                 </div>
                 <div class="header-right">
                     <p>Hello, {{ user.username }}</p>
-                    <a class="header-link" href="admin:logout">Logout</a>
+                    <a class="header-link" href="{% url 'admin:logout' %}">Logout</a>
                 </div>
             </div>
             {% block main %}

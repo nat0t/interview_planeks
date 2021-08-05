@@ -24,7 +24,7 @@ from main.views import SchemaList
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', SchemaList.as_view()),
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('accounts/login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('schemas/', include('main.urls', namespace='main')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

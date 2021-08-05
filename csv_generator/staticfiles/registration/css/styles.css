@@ -1,0 +1,105 @@
+html,body{
+height: 100%;
+font-family: HelveticaNeue;
+}
+
+.container{
+height: 100%;
+align-content: center;
+}
+
+.card{
+height: 445px;
+margin-top: auto;
+margin-bottom: auto;
+width: 650px;
+border: 1px solid #E5E5E5;
+}
+
+.card-header{
+background-color: white;
+border: none;
+}
+
+.card-header h3{
+font-size: 36px;
+line-height: 79px;
+text-align: center;
+color: #373A3C;
+}
+
+#id_username, #id_password{
+display: block;
+width: 100%;
+height: 34px;
+padding: 6px 12px;
+font-size: 14px;
+line-height: 1.42857143;
+color: #555;
+background-color: #fff;
+background-image: none;
+border: 1px solid #ccc;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+}
+
+.card-body{
+width: 100%;
+}
+
+.input-form{
+width: 50%;
+color: black;
+border: 0 !important;
+margin-left: auto;
+margin-right: auto;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.login-button{
+width: 50%;
+margin-left: auto;
+margin-right: auto;
+}
+
+.login_btn{
+color: #FFFFFF;
+background-color: #0275D8;;
+width: 100px;
+}
+
+.login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
