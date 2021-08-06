@@ -25,11 +25,11 @@
                 <td>{{ item.created_at|date:"Y-m-d" }}</a></td>
                 {% if item.status == 'SUCCESS' %}
                     <td><img src="{% static 'main/img/label-ready.png' %}" alt="ready"></td>
-                {% elif item.status == 'PROCESSING' %}
+                {% else %}
                     <td><img src="{% static 'main/img/label-processing.png' %}" alt="processing"></td>
                 {% endif %}
                 <td>
-                    <a href="{{ item.file.url }}" download>Download</a>
+                    <a href="{{ item.url }}" download>Download</a>
                 </td>
             </tr>
         {% endfor %}

@@ -1,6 +1,8 @@
 amqp==5.0.6
 asgiref==3.4.1
 billiard==3.6.4.0
+botocore==1.21.15
+boto3~=1.18.15
 celery==5.1.2
 celery-progress==0.1.1
 certifi==2021.5.30

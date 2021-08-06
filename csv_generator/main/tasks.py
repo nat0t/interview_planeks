@@ -1,11 +1,12 @@
 import csv
 import os
 import time
+import boto3
 
 from celery import shared_task
 from faker import Faker
 
-from csv_generator.settings import MEDIA_ROOT
+from csv_generator.settings import MEDIA_ROOT, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET
 from main.models import Schema, SchemaDetails, Dataset
 
 
@@ -47,9 +48,10 @@ def generate_data(self, schema_id, rows):
     }
     with open(filepath, 'w') as csv_file:
         writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotes)
-        print(names)
         writer.writerow(names)
-        for row in range(rows):
-            self.update_state(state='PROCESSING')
+        for _ in range(rows):
             types_fake = [gen_template[item]() for item in types]
             writer.writerow(types_fake)
+
+    s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+    s3_client.upload_file(filepath, S3_BUCKET, filename)

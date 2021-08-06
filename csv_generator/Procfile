@@ -1,3 +1,2 @@
-
-worker: celery worker --app=tasks.app
-web: gunicorn csv_generator.wsgi --log-file -
+web: gunicorn csv_generator.wsgi
+worker: celery -A csv_generator.celery worker

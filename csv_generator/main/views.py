@@ -1,3 +1,5 @@
+import boto3
+from botocore.client import Config
 from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,6 +8,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
+from csv_generator.settings import S3_BUCKET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_S3_SIGNATURE_VERSION, \
+    REGION_NAME
 from main.forms import SchemaForm, SchemaDetailsFormSet, DatasetForm
 from main.models import Schema, Dataset
 from main.tasks import generate_data
@@ -88,6 +92,7 @@ class DatasetList(LoginRequiredMixin, ListView):
         context = super(DatasetList, self).get_context_data(**kwargs)
         for item in context['object_list']:
             item.status = AsyncResult(item.task_id).state
+            item.url = get_download_link(item)
         context['schema_id'] = self.kwargs['pk']
         return context
 
@@ -104,3 +109,12 @@ def create_dataset(request):
     else:
         form = DatasetForm()
     return render(request, 'main/list_datasets.html', {'form': form})
+
+def get_download_link(file_record):
+    s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
+                             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                             config=Config(signature_version=AWS_S3_SIGNATURE_VERSION,
+                                           region_name=REGION_NAME))
+    return s3_client.generate_presigned_url('get_object',
+                                            Params={'Bucket': S3_BUCKET, 'Key': file_record.file.name},
+                                            ExpiresIn=None)

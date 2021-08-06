@@ -23,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-7c^*o1)-xlb^#9f78-yj@l34e=cq20ixqg0-e9w$n3y6b6sb$o'
+# SECRET_KEY = 'django-insecure-7c^*o1)-xlb^#9f78-yj@l34e=cq20ixqg0-e9w$n3y6b6sb$o'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-7c^*o1)-xlb^#9f78-yj@l34e=cq20ixqg0-e9w$n3y6b6sb$o')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True))
+DEBUG = True
+# DEBUG = bool( os.environ.get('DJANGO_DEBUG', True))
 
 ALLOWED_HOSTS = ['*']
 
@@ -160,27 +160,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 #
 #
-# prod_db = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(prod_db)
-# REDIS_HOST = 'ec2-18-205-68-201.compute-1.amazonaws.com'
-# REDIS_PORT = '32090'
-# REDIS_PASSWORD = 'pdc368c9ef1733e81651abb6b849097112eaad12299a93262963d968ee8648a4d'
-# CELERY_TIMEZONE = "Europe/Moscow"
-# CELERY_TASK_TRACK_STARTED = True
-# CELERY_TASK_TIME_LIMIT = 30 * 60
-# CELERY_BROKER_URL = 'redis://:pdc368c9ef1733e81651abb6b849097112eaad12299a93262963d968ee8648a4d@ec2-18-205-68-201.compute-1.amazonaws.com:32090'
-# CELERY_RESULT_BACKEND = 'redis://:pdc368c9ef1733e81651abb6b849097112eaad12299a93262963d968ee8648a4d@ec2-18-205-68-201.compute-1.amazonaws.com:32090'
-# REDIS_URL = 'redis://:pdc368c9ef1733e81651abb6b849097112eaad12299a93262963d968ee8648a4d@ec2-18-205-68-201.compute-1.amazonaws.com:32090'
-
 prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": 'REDIS_URL',
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#             "PASSWORD": 'pdc368c9ef1733e81651abb6b849097112eaad12299a93262963d968ee8648a4d',
-#         }
-#     }
-# }
+
+
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+
+# heroku-redis
+REDIS_URL = os.environ.get('REDIS_URL', '')
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+S3_BUCKET = os.environ.get('S3_BUCKET', '')
+REGION_NAME = 'eu-central-1'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
